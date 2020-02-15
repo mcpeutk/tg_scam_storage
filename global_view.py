@@ -3,8 +3,9 @@ from quart import Quart, request
 class GlobalView:
     app = Quart(__name__)
 
-    def __init__(self, telegram_view):
+    def __init__(self, telegram_view, manage_view):
         self._telegram_view = telegram_view
+        self._manage_view = manage_view
 
     def run_app(self):
         @self.app.route("/", methods = ["POST", "GET"])
@@ -12,6 +13,6 @@ class GlobalView:
             if (request.method == "POST"):
                 return await self._telegram_view.proceed_request(request)
             elif (request.method == "GET"):
-                return "Hello from bot!"
+                return await self._manage_view.proceed_request(request)
 
         self.app.run()

@@ -1,7 +1,7 @@
 from quart import request, jsonify
 import aiohttp
 
-class TelegramConnector:
+class TelegramView:
     request_session = None
 
     telegram_token = ""
