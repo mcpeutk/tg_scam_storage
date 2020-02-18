@@ -12,6 +12,8 @@ if __name__ == "__main__":
     telegram_view = telegram_view.TelegramView(controller)
     manage_view = manage_view.ManageView()
 
+    controller.set_telegram_view(telegram_view)
+
     global_view = global_view.GlobalView(telegram_view, manage_view)
 
     global_view.run_app()
