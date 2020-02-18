@@ -2,10 +2,10 @@ import telegram_view
 import manage_view
 import global_view
 import controller
-import db_manage
+import users_management
 
 if __name__ == "__main__":
-    users_management = db_manage.UsersManagement()
+    users_management = users_management.UsersManagement()
 
     controller = controller.Controller(users_management)
 
