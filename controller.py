@@ -19,11 +19,11 @@ class Controller:
             pass
         elif (last_action == "add_channel"):
             if "t.me" in message or "@" in message:
-                if (await self._channels_management.get_channel(message) != None):
+                if (await self._channels_management.get_channel_by_link(message) != None):
                     await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
                     await self._telegram_view.send_initial_keyboard(chat_id)
                 else:
-                    await self._channels_management.create_channel(message)
+                    await self._channels_management.create_channel(None, message)
                     await self.set_last_action(chat_id, "proofs")
                     # send proofs request to user
             else:
