@@ -53,6 +53,8 @@ class TelegramView:
         await self.request_session.post(url, json = message)
 
     async def send_initial_keyboard(self, chat_id):
+        await self._controller.set_last_action(chat_id, "initial_keyboard")
+
         keyboard = {
             "keyboard": [
                 ["Добавить канал в базу"],
@@ -72,14 +74,17 @@ class TelegramView:
         await self.request_session.post(url, json = message)
 
     async def add_scam_channel(self, chat_id):
+        await self._controller.set_last_action(chat_id, "add_channel")
         await self.send_message(chat_id, "Отправьте ссылку на канал, юзернейм или какой-нибудь пост из этого канала")
 
     async def send_bot_description(self, chat_id):
+        await self._controller.set_last_action(chat_id, "bot_description")
         description = "test description"
 
         await self.send_message(chat_id, description)
 
     async def send_contacts(self, chat_id):
+        await self._controller.set_last_action(chat_id, "contacts")
         contacts = "@test_username"
 
         await self.send_message(chat_id, contacts)

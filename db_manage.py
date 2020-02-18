@@ -37,17 +37,42 @@ class UsersManagement:
         conn = await aiosqlite.connect(self.db_name)
 
         query = '''INSERT INTO users VALUES (?, ?, ?, ?)'''
-        user_data = (chat_id, curr_time, curr_time, None)
+        user_data = (chat_id, curr_time, curr_time, "start_bot")
 
         await conn.execute(query, user_data)
         await conn.commit()
         await conn.close()
+
+    async def set_last_action(self, chat_id, action):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''UPDATE users SET last_action = ? WHERE chat_id = ?'''
+        data = (action, chat_id)
+
+        await conn.execute(query, data)
+        await conn.commit()
+        await conn.close()
+
+    async def get_last_action(self, chat_id):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT last_action FROM users WHERE chat_id = ?'''
+        data = (chat_id,)
+        c = await conn.execute(query, data)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        return result[0][0]
 
 # if __name__ == "__main__":
 #     import asyncio
 
 #     users = UsersManagement()
 
-#     asyncio.run(users.create_user(2))
+#     asyncio.run(users.create_user(3))
 
-#     print(asyncio.run(users.get_user_by_id(2)))
+#     print(asyncio.run(users.get_user_by_id(3)))
+#     print(asyncio.run(users.get_last_action(3)))

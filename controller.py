@@ -8,3 +8,9 @@ class Controller:
 
     async def proceed_unknown_message(self, chat_id, message):
         pass
+
+    async def set_last_action(self, chat_id, action):
+        await self._users_management.set_last_action(chat_id, action)
+
+    async def get_last_action(self, chat_id):
+        return await self._users_management.get_last_action(chat_id)
