@@ -10,6 +10,7 @@ class Controller:
         pass
 
     async def set_last_action(self, chat_id, action):
+        await self._users_management.set_last_usage_date(chat_id)
         await self._users_management.set_last_action(chat_id, action)
 
     async def get_last_action(self, chat_id):

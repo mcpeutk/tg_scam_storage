@@ -67,6 +67,32 @@ class UsersManagement:
 
         return result[0][0]
 
+    async def set_last_usage_date(self, chat_id):
+        curr_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''UPDATE users SET last_usage_date = ? WHERE chat_id = ?'''
+        data = (curr_time, chat_id)
+
+        await conn.execute(query, data)
+        await conn.commit()
+        await conn.close()
+
+    async def get_last_usage_date(self, chat_id):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT last_usage_date FROM users WHERE chat_id = ?'''
+        data = (chat_id,)
+        c = await conn.execute(query, data)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        return result[0][0]
+
 # if __name__ == "__main__":
 #     import asyncio
 
