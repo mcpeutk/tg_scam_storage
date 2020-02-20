@@ -24,13 +24,12 @@ class Controller:
                     await self._telegram_view.send_initial_keyboard(chat_id)
                 else:
                     await self._channels_management.create_channel(None, message)
-                    await self.set_last_action(chat_id, "proofs")
-                    # send proofs request to user
+                    await self._telegram_view.send_proofs_request(chat_id)
             else:
                 await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
         elif (last_action == "proofs"):
+            await self._telegram_view.send_message(chat_id, "Подтверждения и канал приняты на рассмотрение! Если у нас возникнут какие-либо вопросы или подтверждений будет недостаточно - мы обязательно вам напишем!")
             # consume proofs
-            pass
 
 
     async def set_last_action(self, chat_id, action):

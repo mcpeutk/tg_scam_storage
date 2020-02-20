@@ -88,3 +88,7 @@ class TelegramView:
         contacts = "@test_username"
 
         await self.send_message(chat_id, contacts)
+
+    async def send_proofs_request(self, chat_id):
+        await self._controller.set_last_action(chat_id, "proofs")
+        await self._controller.send_message(chat_id, "Отправьте скриншот или переписку или любое другое подтверждение ботоводства или мошенничества")
