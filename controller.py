@@ -1,8 +1,9 @@
 class Controller:
-    def __init__(self, users_management, channels_management):
+    def __init__(self, users_management, channels_management, telegram_connector):
         self._users_management = users_management
         self._channels_management = channels_management
         self._telegram_view = None
+        self._telegram_connector = telegram_connector
 
     def set_telegram_view(self, telegram_view):
         self._telegram_view = telegram_view

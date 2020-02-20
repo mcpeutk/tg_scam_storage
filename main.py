@@ -4,10 +4,12 @@ import global_view
 import controller
 import users_management
 import channels_management
+import telegram_connector
 
 if __name__ == "__main__":
     users_management = users_management.UsersManagement()
     channels_management = channels_management.ChannelsManagement()
+    telegram_connector = telegram_connector.TelegramConnector()
 
     controller = controller.Controller(users_management, channels_management)
 
