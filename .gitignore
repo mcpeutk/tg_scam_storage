@@ -3,3 +3,7 @@ venv/
 .vscode/
 
 *.db
+
+private_settings.txt
+
+ngrok

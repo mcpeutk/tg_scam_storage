@@ -2,10 +2,12 @@ from quart import request, jsonify
 import aiohttp
 import json
 
+import private_settings
+
 class TelegramView:
     request_session = None
 
-    telegram_token = ""
+    telegram_token = private_settings.TELEGRAM_TOKEN
     telegram_url = "https://api.telegram.org/" + telegram_token
 
     def __init__(self, controller):
@@ -15,7 +17,7 @@ class TelegramView:
         if (request.method != "POST"):
             return
 
-        if (self.requests_session == None):
+        if (self.request_session == None):
             self.request_session = aiohttp.ClientSession()
 
         response = await request.get_json()
@@ -39,9 +41,7 @@ class TelegramView:
         elif (response["message"]["text"] == "Вернуться в главное меню"):
             await self.send_initial_keyboard(chat_id)
         else:
-            await self._controller.proceed_unknown_message(chat_id, response["message"]["text"])
-
-        await self.send_message(chat_id, "Hello!")
+            await self._controller.proceed_unknown_message(chat_id, response["message"]["text"])    
         
         return jsonify(response)
 
@@ -73,6 +73,9 @@ class TelegramView:
         }
 
         url = self.telegram_url + "sendMessage"
+
+        print(url)
+
         await self.request_session.post(url, json = message)
 
     async def add_scam_channel(self, chat_id):
@@ -102,7 +105,7 @@ class TelegramView:
 
     async def send_contacts(self, chat_id):
         await self._controller.set_last_action(chat_id, "contacts")
-        contacts = "@test_username"
+        contacts = "По всем вопросам писать сюда: @test_username"
 
         await self.send_message(chat_id, contacts)
 

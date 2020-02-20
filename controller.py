@@ -29,6 +29,7 @@ class Controller:
                 await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
         elif (last_action == "proofs"):
             await self._telegram_view.send_message(chat_id, "Подтверждения и канал приняты на рассмотрение! Если у нас возникнут какие-либо вопросы или подтверждений будет недостаточно - мы обязательно вам напишем!")
+            await self._telegram_view.send_initial_keyboard(chat_id)
             # consume proofs
 
 

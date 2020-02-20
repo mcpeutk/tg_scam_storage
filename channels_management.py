@@ -9,7 +9,7 @@ class ChannelsManagement:
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS channels (channel_id text, \
                                                         channel_link text, \
-                                                        proofs_link text")
+                                                        proofs_link text)")
         conn.commit()
         conn.close()
 
@@ -38,3 +38,25 @@ class ChannelsManagement:
         if (len(result) == 0):
             return None
         return result[0]
+
+    async def select_all_channels(self):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT * FROM channels'''
+
+        c = await conn.execute(query)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        if (len(result) == 0):
+            return None
+        return result[0][0]
+
+if __name__ == "__main__":
+    import asyncio
+
+    channels_management = ChannelsManagement()
+    asyncio.run(channels_management.select_all_channels()) 
