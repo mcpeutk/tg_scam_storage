@@ -36,6 +36,8 @@ class TelegramView:
             await self.send_bot_description(chat_id)
         elif (response["message"]["text"] == "Написать создателю бота"):
             await self.send_contacts(chat_id)
+        elif (response["message"]["text"] == "Вернуться в главное меню"):
+            await self.send_initial_keyboard(chat_id)
         else:
             await self._controller.proceed_unknown_message(chat_id, response["message"]["text"])
 
@@ -75,7 +77,22 @@ class TelegramView:
 
     async def add_scam_channel(self, chat_id):
         await self._controller.set_last_action(chat_id, "add_channel")
-        await self.send_message(chat_id, "Отправьте ссылку на канал, юзернейм или какой-нибудь пост из этого канала")
+
+        keyboard = {
+            "keyboard": [
+                ["Вернуться в главное меню"],
+            ],
+            "resize_keyboard": True
+        }
+
+        message = {
+            "chat_id": chat_id,
+            "text": "Отправьте ссылку на канал, юзернейм или какой-нибудь пост из этого канала",
+            "reply_markup": json.dumps(keyboard)
+        }
+
+        url = self.telegram_url + "sendMessage"
+        await self.request_session.post(url, json = message)
 
     async def send_bot_description(self, chat_id):
         await self._controller.set_last_action(chat_id, "bot_description")
@@ -91,4 +108,19 @@ class TelegramView:
 
     async def send_proofs_request(self, chat_id):
         await self._controller.set_last_action(chat_id, "proofs")
-        await self._controller.send_message(chat_id, "Отправьте скриншот или переписку или любое другое подтверждение ботоводства или мошенничества")
+
+        keyboard = {
+            "keyboard": [
+                ["Вернуться в главное меню"],
+            ],
+            "resize_keyboard": True
+        }
+
+        message = {
+            "chat_id": chat_id,
+            "text": "Отправьте скриншот-подтверждение ботоводства или мошенничества",
+            "reply_markup": json.dumps(keyboard)
+        }
+
+        url = self.telegram_url + "sendMessage"
+        await self.request_session.post(url, json = message)   
