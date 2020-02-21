@@ -11,6 +11,7 @@ class UsersManagement:
         c.execute("CREATE TABLE IF NOT EXISTS users (chat_id text, \
                                                      start_date text, \
                                                      last_usage_date text, \
+                                                     last_added_channel, \
                                                      last_action text)")
         conn.commit()
         conn.close()
@@ -36,8 +37,8 @@ class UsersManagement:
 
         conn = await aiosqlite.connect(self.db_name)
 
-        query = '''INSERT INTO users VALUES (?, ?, ?, ?)'''
-        user_data = (chat_id, curr_time, curr_time, "start_bot")
+        query = '''INSERT INTO users VALUES (?, ?, ?, ?, ?)'''
+        user_data = (chat_id, curr_time, curr_time, None, "start_bot")
 
         await conn.execute(query, user_data)
         await conn.commit()
@@ -83,6 +84,30 @@ class UsersManagement:
         conn = await aiosqlite.connect(self.db_name)
 
         query = '''SELECT last_usage_date FROM users WHERE chat_id = ?'''
+        data = (chat_id,)
+        c = await conn.execute(query, data)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        return result[0][0]
+
+    async def set_last_added_channel(self, chat_id, channel_identifier):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''UPDATE users SET last_added_channel = ? WHERE chat_id = ?'''
+        data = (channel_identifier, chat_id)
+
+        await conn.execute(query, data)
+        await conn.commit()
+        await conn.close()
+
+    async def get_last_added_channel(self, chat_id):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT last_added_channel FROM users WHERE chat_id = ?'''
         data = (chat_id,)
         c = await conn.execute(query, data)
 
