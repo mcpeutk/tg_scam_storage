@@ -37,9 +37,11 @@ class Controller:
         elif (last_action == "proofs"):
             await self._telegram_view.send_message(chat_id, "Подтверждения и канал приняты на рассмотрение! Если у нас возникнут какие-либо вопросы или подтверждений будет недостаточно - мы обязательно вам напишем!")
             await self._telegram_view.send_initial_keyboard(chat_id)
+
             # consume proofs
+            
             last_added_channel = await self._users_management.get_last_added_channel(chat_id)
-            # await self._manual_management.set_channel_proofs(chat_id, last_added_channel, proofs)
+            # await self._manual_management.add_channel_proofs_request(chat_id, last_added_channel, proofs)
 
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)
