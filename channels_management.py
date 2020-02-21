@@ -39,6 +39,22 @@ class ChannelsManagement:
             return None
         return result[0]
 
+    async def get_channel_by_id(self, channel_id):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT * FROM channels WHERE channel_id = ?'''
+        data = (channel_id,)
+        c = await conn.execute(query, data)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        if (len(result) == 0):
+            return None
+        return result[0]
+
     async def select_all_channels(self):
         conn = await aiosqlite.connect(self.db_name)
 

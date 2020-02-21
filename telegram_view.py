@@ -74,8 +74,6 @@ class TelegramView:
 
         url = self.telegram_url + "sendMessage"
 
-        print(url)
-
         await self.request_session.post(url, json = message)
 
     async def add_scam_channel(self, chat_id):

@@ -1,3 +1,5 @@
+import utils
+
 class Controller:
     def __init__(self, users_management, channels_management, telegram_connector):
         self._users_management = users_management
@@ -20,11 +22,13 @@ class Controller:
             pass
         elif (last_action == "add_channel"):
             if "t.me" in message or "@" in message:
-                if (await self._channels_management.get_channel_by_link(message) != None):
+                username = await utils.fetch_username(message)
+                channel_id = await self._telegram_connector.get_channel(username)
+                if (await self._channels_management.get_channel_by_id(channel_id) != None):
                     await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
                     await self._telegram_view.send_initial_keyboard(chat_id)
                 else:
-                    await self._channels_management.create_channel(None, message)
+                    # await self._channels_management.create_channel(None, message)
                     await self._telegram_view.send_proofs_request(chat_id)
             else:
                 await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
