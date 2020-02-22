@@ -35,13 +35,24 @@ class Controller:
             else:
                 await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
         elif (last_action == "proofs"):
-            await self._telegram_view.send_message(chat_id, "Подтверждения и канал приняты на рассмотрение! Если у нас возникнут какие-либо вопросы или подтверждений будет недостаточно - мы обязательно вам напишем!")
-            await self._telegram_view.send_initial_keyboard(chat_id)
+            await self._telegram_view.send_message(chat_id, "Пожалуйста, отправьте боту ваши подтверждения в виде скриншота")
 
-            # consume proofs
-            
-            last_added_channel = await self._users_management.get_last_added_channel(chat_id)
-            # await self._manual_management.add_channel_proofs_request(chat_id, last_added_channel, proofs)
+    async def proceed_photo(self, chat_id, photo):
+        last_action = await self.get_last_action(chat_id)
+
+        if (last_action != "proofs"):
+            await self._telegram_view.send_message(chat_id, "Я не знаю как ответить на ваше сообщение. Попробуйте воспользоваться кнопками меню")
+            await self._telegram_view.send_initial_keyboard(chat_id)
+            return
+
+        await self._telegram_view.send_message(chat_id, "Подтверждения и канал приняты на рассмотрение! Если у нас возникнут какие-либо вопросы или подтверждений будет недостаточно - мы обязательно вам напишем!")
+        await self._telegram_view.send_initial_keyboard(chat_id)
+
+        photo_id = photo["file_id"]
+
+        last_added_channel = self._users_management.get_last_added_channel(chat_id)
+
+        await self._manual_management.add_channel_proofs_request(chat_id, last_added_channel, photo_id)
 
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)

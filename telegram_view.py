@@ -22,10 +22,19 @@ class TelegramView:
 
         response = await request.get_json()
 
+        print(response)
+
         if (not "message" in response.keys()):
             return jsonify(response)
 
         chat_id = response["message"]["chat"]["id"]
+
+        if ("message" not in response.keys() and "photo" in response.keys()):
+            await self._controller.proceed_photo(chat_id, response["photo"][0])
+            return jsonify(response)
+
+        if ("message" not in response.keys()):
+            return jsonify(response)
 
         if (response["message"]["text"] == "/start"):
             await self._controller.start_bot(chat_id)
@@ -124,4 +133,15 @@ class TelegramView:
         }
 
         url = self.telegram_url + "sendMessage"
-        await self.request_session.post(url, json = message)   
+        await self.request_session.post(url, json = message)
+
+    async def send_file(self, chat_id, file_id):
+        message = {
+            "chat_id": chat_id,
+            "photo": file_id
+        }
+
+        url = self.telegram_url + "sendPhoto"
+
+        response = await self.request_session.post(url, json = message)
+        print(await response.text())
