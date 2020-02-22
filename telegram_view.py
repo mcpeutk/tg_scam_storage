@@ -22,18 +22,16 @@ class TelegramView:
 
         response = await request.get_json()
 
-        print(response)
-
         if (not "message" in response.keys()):
             return jsonify(response)
 
         chat_id = response["message"]["chat"]["id"]
 
-        if ("message" not in response.keys() and "photo" in response.keys()):
-            await self._controller.proceed_photo(chat_id, response["photo"][0])
+        if ("text" not in response["message"].keys() and "photo" in response["message"].keys()):
+            await self._controller.proceed_photo(chat_id, response["message"]["photo"][0])
             return jsonify(response)
 
-        if ("message" not in response.keys()):
+        if ("text" not in response["message"].keys()):
             return jsonify(response)
 
         if (response["message"]["text"] == "/start"):

@@ -18,7 +18,7 @@ class Controller:
     async def proceed_unknown_message(self, chat_id, message):
         last_action = await self.get_last_action(chat_id)
 
-        if (last_action == "start_bot" or last_action == "initial_keyboard"):
+        if (last_action in ["start_bot", "initial_keyboard", "bot_description", "contacts"]):
             if ("t.me" in message or "@" in message):
                 username = await utils.fetch_username(message)
                 channel_id = await self._telegram_connector.get_channel(username)
@@ -71,7 +71,7 @@ class Controller:
 
         photo_id = photo["file_id"]
 
-        last_added_channel = self._users_management.get_last_added_channel(chat_id)
+        last_added_channel = await self._users_management.get_last_added_channel(chat_id)
 
         await self._manual_management.add_channel_proofs_request(chat_id, last_added_channel, photo_id)
 

@@ -10,7 +10,7 @@ class ManualManagement:
         conn = sqlite3.connect(self.db_name)
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS manual_requests (chat_id text, \
-                                                               channel_message text, \
+                                                               channel_id_message text, \
                                                                proofs_link text)")
         conn.commit()
         conn.close()
