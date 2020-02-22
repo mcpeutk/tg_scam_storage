@@ -19,12 +19,33 @@ class Controller:
         last_action = await self.get_last_action(chat_id)
 
         if (last_action == "start_bot" or last_action == "initial_keyboard"):
-            # consume post from channel or link or username
-            pass
-        elif (last_action == "add_channel"):
-            if "t.me" in message or "@" in message:
+            if ("t.me" in message or "@" in message):
                 username = await utils.fetch_username(message)
                 channel_id = await self._telegram_connector.get_channel(username)
+
+                if (channel_id == None):
+                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
+                    return
+                
+                channel = await self._channels_management.get_channel_by_id(channel_id)
+                if (channel != None):
+                    proof_photo = channel[2]
+
+                    self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе( Подтверждения ниже:")
+                    if (proof_photo != None):
+                        self._telegram_view.send_file(chat_id, proof_photo)
+                    else:
+                        self._telegram_view.send_message("Пруфов нет, но вы держитесь")
+                else:
+                    await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+        elif (last_action == "add_channel"):
+            if ("t.me" in message or "@" in message):
+                username = await utils.fetch_username(message)
+                channel_id = await self._telegram_connector.get_channel(username)
+
+                if (channel_id == None):
+                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
+                    return
                 if (await self._channels_management.get_channel_by_id(channel_id) != None):
                     await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
                     await self._telegram_view.send_initial_keyboard(chat_id)

@@ -19,9 +19,9 @@ class ChannelsManagement:
         conn = await aiosqlite.connect(self.db_name)
 
         query = '''INSERT INTO channels VALUES (?, ?, ?)'''
-        user_data = (channel_id, channel_link, None)
+        channel_data = (channel_id, channel_link, None)
 
-        await conn.execute(query, user_data)
+        await conn.execute(query, channel_data)
         await conn.commit()
         await conn.close()
 
@@ -71,10 +71,12 @@ class ChannelsManagement:
 
         if (len(result) == 0):
             return None
-        return result[0][0]
+        return result[0]
 
 if __name__ == "__main__":
     import asyncio
 
     channels_management = ChannelsManagement()
-    asyncio.run(channels_management.select_all_channels()) 
+    asyncio.run(channels_management.create_channel(1, "@testlink"))
+    res = asyncio.run(channels_management.select_all_channels())
+    # get_channel_by_id
