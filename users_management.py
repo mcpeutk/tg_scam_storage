@@ -2,8 +2,10 @@ import sqlite3
 import aiosqlite
 import datetime
 
+import private_settings
+
 class UsersManagement:
-    db_name = "bot.db"
+    db_name = private_settings.DB_NAME
 
     def __init__(self):
         conn = sqlite3.connect(self.db_name)
