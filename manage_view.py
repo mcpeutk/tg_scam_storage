@@ -12,7 +12,9 @@ class ManageView:
         channels = await self._channels_management.select_all_channels()
         manual_requests = await self._manual_management.select_all_requests()
 
-        return await render_template("manage.html")
+        return await render_template("manage.html", users = users, 
+                                                    channels = channels, 
+                                                    manual_requests = manual_requests)
 
     async def proceed_form(self, form):
         pass

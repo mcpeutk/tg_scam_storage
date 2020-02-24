@@ -58,7 +58,7 @@ class ManualManagement:
     async def select_all_requests(self):
         conn = await aiosqlite.connect(self.db_name)
 
-        query = '''SELECT * FROM manual_requests'''
+        query = '''SELECT rowid, chat_id, channel_id_message, proofs_link FROM manual_requests'''
 
         c = await conn.execute(query)
 
@@ -69,4 +69,4 @@ class ManualManagement:
 
         if (len(result) == 0):
             return None
-        return result[0]
+        return result

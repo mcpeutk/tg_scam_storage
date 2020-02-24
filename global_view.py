@@ -20,6 +20,8 @@ class GlobalView:
         async def main_route():
             if (request.method == "POST"):
                 return await self._telegram_view.proceed_request(request)
+            else:
+                return "Hello from bot!"
 
         @self.app.route("/manage", methods = ["GET"])
         async def manage_panel_route():

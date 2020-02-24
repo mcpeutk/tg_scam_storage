@@ -134,7 +134,7 @@ class UsersManagement:
 
         if (len(result) == 0):
             return None
-        return result[0]
+        return result
 
 # if __name__ == "__main__":
 #     import asyncio

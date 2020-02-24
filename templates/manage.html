@@ -1,12 +1,95 @@
 <html>
 
     <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
         <title>Manage page</title>
     </head>
 
     <body>
 
-        <h1>Manage page</h1>
+        <div class = "container">
+            <div class="row" style="margin-top: 40px;">
+                <h3>Users:</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>chat_id</th>
+                            <th>start_date</th>
+                            <th>last_usage_date</th>
+                            <th>last_added_channel</th>
+                            <th>last_action</th>
+                        </tr>
+                    </thead>
+                    {% if users != None %}
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                {% for elem in user %}
+                                    <td>{{ elem }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+
+            </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <h3>Channels:</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>channel_id</th>
+                            <th>channel_link</th>
+                            <th>proofs_link</th>
+                        </tr>
+                    </thead>
+                    {% if channels != None %}
+                    <tbody>
+                        {% for channel in channels %}
+                            <tr>
+                                {% for elem in channel %}
+                                    <td>{{ elem }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+
+            </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <h3>Requests:</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>rowid</th>
+                            <th>chat_id</th>
+                            <th>channel_id_message</th>
+                            <th>proofs_link</th>
+                        </tr>
+                    </thead>
+                    {% if manual_requests != None %}
+                    <tbody>
+                        {% for manual_request in manual_requests %}
+                            <tr>
+                                {% for elem in manual_request %}
+                                    <td>{{ elem }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+
+            </div>
+        </div>
 
     </body>
 
