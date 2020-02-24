@@ -7,3 +7,6 @@ class ManageView:
 
     async def proceed_request(self, request):
         return await render_template("manage.html")
+
+    async def proceed_form(self, form):
+        pass
