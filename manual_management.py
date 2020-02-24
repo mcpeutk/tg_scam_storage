@@ -54,3 +54,19 @@ class ManualManagement:
         await conn.execute(query, data)
         await conn.commit()
         await conn.close()
+
+    async def select_all_requests(self):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT * FROM manual_requests'''
+
+        c = await conn.execute(query)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        if (len(result) == 0):
+            return None
+        return result[0]

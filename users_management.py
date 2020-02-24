@@ -120,6 +120,22 @@ class UsersManagement:
 
         return result[0][0]
 
+    async def select_all_users(self):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''SELECT * FROM users'''
+
+        c = await conn.execute(query)
+
+        result = await c.fetchall()
+
+        await c.close()
+        await conn.close()
+
+        if (len(result) == 0):
+            return None
+        return result[0]
+
 # if __name__ == "__main__":
 #     import asyncio
 

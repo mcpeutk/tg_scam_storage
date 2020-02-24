@@ -17,7 +17,7 @@ if __name__ == "__main__":
     controller = controller.Controller(users_management, channels_management, manual_management, telegram_connector)
 
     telegram_view = telegram_view.TelegramView(controller)
-    manage_view = manage_view.ManageView()
+    manage_view = manage_view.ManageView(users_management, channels_management, manual_management)
 
     controller.set_telegram_view(telegram_view)
 
