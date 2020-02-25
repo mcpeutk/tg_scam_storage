@@ -89,6 +89,46 @@
                 </table>
 
             </div>
+
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-md-6" style = "padding-left: 0px;">
+
+                    <h3>Delete manual request by rowid</h3>
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="rowid">rowid</label>
+                            <input type="text" class="form-control" name="rowid" id="rowid" placeholder="Input rowid">
+                        </div>
+
+                        <button name="delete_manual_request" type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+
+                </div>
+
+                <div class="col-md-6" style = "padding-right: 0px;">
+
+                    <h3>Add channel from manual request</h3>
+                    <form method="post">
+                        <div class="form-group">
+                            <div class = "form-group">
+                                <label for="chat_id">chat_id</label>
+                                <input type="text" class="form-control" name="chat_id" id="chat_id" placeholder="Input chat_id">
+                            </div>
+                            <div class = "form-group">
+                                <label for="channel_link">channel_link</label>
+                                <input type="text" class="form-control" name="channel_link" id="channel_link" placeholder="Input channel_link">
+                            </div>
+                            <div class = "form-group">
+                                <label for="proofs_link">proofs_link</label>
+                                <input type="text" class="form-control" name="proofs_link" id="proofs_link" placeholder="Input proofs_link">
+                            </div>
+                        </div>
+
+                        <button name="add_channel" type="submit" class="btn btn-primary">Add</button>
+                    </form>
+
+                </div>
+            </div>
         </div>
 
     </body>
