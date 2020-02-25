@@ -17,4 +17,9 @@ class ManageView:
                                                     manual_requests = manual_requests)
 
     async def proceed_form(self, form):
-        pass
+        if ("delete_manual_request" in form):
+            await self._manual_management.remove_channel_proofs_request(form["rowid"])
+            await self._manual_management.remove_channel_creation_request(form["rowid"])
+        elif ("add_channel" in form):
+            await self._channels_management.create_channel(form["chat_id"], form["channel_link"])
+            await self._channels_management.set_channel_proofs(form["channel_link"], form["proofs_link"])
