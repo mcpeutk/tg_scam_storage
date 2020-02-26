@@ -33,11 +33,11 @@ class Controller:
                 if (channel != None):
                     proof_photo = channel[2]
 
-                    self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе( Подтверждения ниже:")
+                    await self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе(\nПодтверждения ниже:")
                     if (proof_photo != None):
-                        self._telegram_view.send_file(chat_id, proof_photo)
+                        await self._telegram_view.send_file(chat_id, proof_photo)
                     else:
-                        self._telegram_view.send_message("Пруфов нет, но вы держитесь")
+                        await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
                 else:
                     await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
         elif (last_action == "add_channel"):
@@ -52,7 +52,7 @@ class Controller:
                     await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
                     await self._telegram_view.send_initial_keyboard(chat_id)
                 else:
-                    await self._manual_management.add_channel_creation_request(chat_id, message)
+                    await self._manual_management.add_channel_creation_request(chat_id, message, channel_id)
                     await self._users_management.set_last_added_channel(chat_id, message)
                     await self._telegram_view.send_proofs_request(chat_id)
             else:

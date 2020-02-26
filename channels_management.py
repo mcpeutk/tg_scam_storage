@@ -27,8 +27,8 @@ class ChannelsManagement:
 
     async def set_channel_proofs(self, channel_id, proofs_link):
         conn = await aiosqlite.connect(self.db_name)
-
-        query = '''UPDATE channels SET proofs_link = ? WHERE channel_id = ?'''
+        
+        query = '''UPDATE channels SET proofs_link = ? WHERE channel_link = ?'''
         data = (proofs_link, channel_id)
 
         await conn.execute(query, data)

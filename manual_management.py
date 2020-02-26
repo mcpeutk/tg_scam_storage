@@ -11,15 +11,16 @@ class ManualManagement:
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS manual_requests (chat_id text, \
                                                                channel_id_message text, \
+                                                               channel_id text, \
                                                                proofs_link text)")
         conn.commit()
         conn.close()
 
-    async def add_channel_creation_request(self, chat_id, channel_id_message):
+    async def add_channel_creation_request(self, chat_id, channel_id_message, channel_id):
         conn = await aiosqlite.connect(self.db_name)
 
-        query = '''INSERT INTO manual_requests VALUES (?, ?, ?)'''
-        request_data = (chat_id, channel_id_message, None)
+        query = '''INSERT INTO manual_requests VALUES (?, ?, ?, ?)'''
+        request_data = (chat_id, channel_id_message, channel_id, None)
 
         await conn.execute(query, request_data)
         await conn.commit()
@@ -58,7 +59,7 @@ class ManualManagement:
     async def select_all_requests(self):
         conn = await aiosqlite.connect(self.db_name)
 
-        query = '''SELECT rowid, chat_id, channel_id_message, proofs_link FROM manual_requests'''
+        query = '''SELECT rowid, chat_id, channel_id_message, channel_id, proofs_link FROM manual_requests'''
 
         c = await conn.execute(query)
 

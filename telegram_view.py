@@ -142,4 +142,4 @@ class TelegramView:
         url = self.telegram_url + "sendPhoto"
 
         response = await self.request_session.post(url, json = message)
-        print(await response.text())
+
