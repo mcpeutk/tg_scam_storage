@@ -31,6 +31,10 @@ class TelegramView:
             await self._controller.proceed_photo(chat_id, response["message"]["photo"][0])
             return jsonify(response)
 
+        if ("forward_from_chat" in response["message"].keys()):
+            await self._controller.proceed_repost(chat_id, response["message"])
+            return jsonify(response)
+
         if ("text" not in response["message"].keys()):
             return jsonify(response)
 

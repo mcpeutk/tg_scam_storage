@@ -77,6 +77,23 @@ class Controller:
 
         await self._manual_management.add_channel_proofs_request(chat_id, last_added_channel, photo_id)
 
+    async def proceed_repost(self, chat_id, message):
+        if (message["forward_from_chat"]["type"] != "channel"):
+            await self._telegram_view.send_message(chat_id, "Пожалуйста, отправьте боту репост именно из канала, который вы хотите проверить")
+            return
+
+        channel = await self._channels_management.get_channel_by_id(message["forward_from_chat"]["id"])
+        if (channel != None):
+            proof_photo = channel[2]
+
+            await self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе(\nПодтверждения ниже:")
+            if (proof_photo != None):
+                await self._telegram_view.send_file(chat_id, proof_photo)
+            else:
+                await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
+        else:
+            await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)
         await self._users_management.set_last_action(chat_id, action)
