@@ -83,6 +83,16 @@ class ChannelsManagement:
             return None
         return result
 
+    async def delete_channel(self, channel_id):
+        conn = await aiosqlite.connect(self.db_name)
+
+        query = '''DELETE FROM channels WHERE channel_id = ?'''
+        channel_data = (channel_id,)
+
+        await conn.execute(query, channel_data)
+        await conn.commit()
+        await conn.close()
+
 if __name__ == "__main__":
     import asyncio
 

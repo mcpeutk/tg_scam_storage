@@ -23,3 +23,5 @@ class ManageView:
         elif ("add_channel" in form):
             await self._channels_management.create_channel(form["channel_id"], form["channel_link"])
             await self._channels_management.set_channel_proofs(form["channel_link"], form["proofs_link"])
+        elif ("delete_channel" in form):
+            await self._channels_management.delete_channel(form["channel_id"])
