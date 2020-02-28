@@ -41,22 +41,7 @@ class Controller:
                 else:
                     await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
         elif (last_action == "add_channel"):
-            if ("t.me" in message or "@" in message):
-                username = await utils.fetch_username(message)
-                channel_id = await self._telegram_connector.get_channel(username)
-
-                if (channel_id == None):
-                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
-                    return
-                if (await self._channels_management.get_channel_by_id(channel_id) != None):
-                    await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
-                    await self._telegram_view.send_initial_keyboard(chat_id)
-                else:
-                    await self._manual_management.add_channel_creation_request(chat_id, message, channel_id)
-                    await self._users_management.set_last_added_channel(chat_id, message)
-                    await self._telegram_view.send_proofs_request(chat_id)
-            else:
-                await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
+            await self.add_channel(chat_id, message)
         elif (last_action == "proofs"):
             await self._telegram_view.send_message(chat_id, "Пожалуйста, отправьте боту ваши подтверждения в виде скриншота")
 
@@ -93,6 +78,36 @@ class Controller:
                 await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
         else:
             await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+
+    async def add_channel(self, chat_id, message):
+        if (type(message) == dict):
+            if ("forward_from_chat" in message.keys()):
+                if (message["forward_from_chat"]["type"] != "channel"):
+                    await self._telegram_view.send_message(chat_id, "Пожалуйста, отправьте боту репост именно из канала, который вы хотите проверить")
+                    return
+
+                await self._manual_management.add_channel_creation_request(chat_id, message["forward_from_chat"]["username"], message["forward_from_chat"]["id"])
+                await self._users_management.set_last_added_channel(chat_id, message)
+                await self._telegram_view.send_proofs_request(chat_id)
+            else:
+                await self._telegram_view.send_message(chat_id, "Я не знаю как ответить на это сообщение(\nПожалуйста, отправьте боту репост именно из канала или ссылку/юзернейм этого канала")
+        elif (type(message) == str):
+            if ("t.me" in message or "@" in message):
+                username = await utils.fetch_username(message)
+                channel_id = await self._telegram_connector.get_channel(username)
+
+                if (channel_id == None):
+                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
+                    return
+                if (await self._channels_management.get_channel_by_id(channel_id) != None):
+                    await self._telegram_view.send_message(chat_id, "Указанный канал уже был добавлен в нашу базу ранее")
+                    await self._telegram_view.send_initial_keyboard(chat_id)
+                else:
+                    await self._manual_management.add_channel_creation_request(chat_id, message, channel_id)
+                    await self._users_management.set_last_added_channel(chat_id, message)
+                    await self._telegram_view.send_proofs_request(chat_id)
+            else:
+                await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
 
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)
