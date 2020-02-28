@@ -21,25 +21,7 @@ class Controller:
         last_action = await self.get_last_action(chat_id)
 
         if (last_action in ["start_bot", "initial_keyboard", "bot_description", "contacts"]):
-            if ("t.me" in message or "@" in message):
-                username = await utils.fetch_username(message)
-                channel_id = await self._telegram_connector.get_channel(username)
-
-                if (channel_id == None):
-                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
-                    return
-                
-                channel = await self._channels_management.get_channel_by_id(channel_id)
-                if (channel != None):
-                    proof_photo = channel[2]
-
-                    await self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе(\nПодтверждения ниже:")
-                    if (proof_photo != None):
-                        await self._telegram_view.send_file(chat_id, proof_photo)
-                    else:
-                        await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
-                else:
-                    await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+            await self.check_channel(chat_id, message)
         elif (last_action == "add_channel"):
             await self.add_channel(chat_id, message)
         elif (last_action == "proofs"):
@@ -108,6 +90,32 @@ class Controller:
                     await self._telegram_view.send_proofs_request(chat_id)
             else:
                 await self._telegram_view.send_message(chat_id, "Некорректная ссылка или юзернейм канала. Пожалуйста, отправьте ссылку, которая начинается с \"t.me/\" или юзернейм, который начинается с @")
+
+    async def check_channel(self, chat_id, message):
+        if (type(message) == dict):
+            self.proceed_repost(chat_id, message)
+        elif (type(message) == str):
+            if ("t.me" in message or "@" in message):
+                username = await utils.fetch_username(message)
+                channel_id = await self._telegram_connector.get_channel(username)
+
+                if (channel_id == None):
+                    await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
+                    return
+                
+                channel = await self._channels_management.get_channel_by_id(channel_id)
+                if (channel != None):
+                    proof_photo = channel[2]
+
+                    await self._telegram_view.send_message(chat_id, "Увы, но этот канал оказался в нашей базе(\nПодтверждения ниже:")
+                    if (proof_photo != None):
+                        await self._telegram_view.send_file(chat_id, proof_photo)
+                    else:
+                        await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
+                else:
+                    await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+            else:
+                await self._telegram_view.send_message(chat_id, "Я не знаю как ответить на это сообщение(\nПожалуйста, воспользуйтесь кнопками меню или отправьте мне юзернейм/ссылку/пост канала для проверки")        
 
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)
