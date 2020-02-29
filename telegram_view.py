@@ -27,7 +27,7 @@ class TelegramView:
 
         chat_id = response["message"]["chat"]["id"]
 
-        if ("text" not in response["message"].keys() and "photo" in response["message"].keys()):
+        if ("text" not in response["message"].keys() and "photo" in response["message"].keys() and "forward_from_chat" not in response["message"].keys()):
             await self._controller.proceed_photo(chat_id, response["message"]["photo"][0])
             return jsonify(response)
 

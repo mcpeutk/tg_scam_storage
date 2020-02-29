@@ -39,7 +39,7 @@ class ManualManagement:
     async def remove_channel_creation_request(self, record_id):
         conn = await aiosqlite.connect(self.db_name)
 
-        query = '''DELETE FROM manual_requests WHERE rowid = '''
+        query = '''DELETE FROM manual_requests WHERE rowid = ?'''
         record_data = (record_id,)
 
         await conn.execute(query, record_data)

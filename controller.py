@@ -52,7 +52,7 @@ class Controller:
                     return
 
                 await self._manual_management.add_channel_creation_request(chat_id, message["forward_from_chat"]["username"], message["forward_from_chat"]["id"])
-                await self._users_management.set_last_added_channel(chat_id, message)
+                await self._users_management.set_last_added_channel(chat_id, message["forward_from_chat"]["username"])
                 await self._telegram_view.send_proofs_request(chat_id)
             else:
                 await self._telegram_view.send_message(chat_id, "Я не знаю как ответить на это сообщение(\nПожалуйста, отправьте боту репост именно из канала или ссылку/юзернейм этого канала")
@@ -92,6 +92,7 @@ class Controller:
 
         if (channel_id == None):
             await self._telegram_view.send_message(chat_id, "Указанного вами канала не существует. Проверьте правльность написания юзернейма или ссылки")
+            await self._telegram_view.send_initial_keyboard(chat_id)
             return
         
         channel = await self._channels_management.get_channel_by_id(channel_id)
@@ -103,8 +104,10 @@ class Controller:
                 await self._telegram_view.send_file(chat_id, proof_photo)
             else:
                 await self._telegram_view.send_message("Пруфов нет, но вы держитесь")
+            await self._telegram_view.send_initial_keyboard(chat_id)
         else:
             await self._telegram_view.send_message(chat_id, "Такого канала нет в нашей базе. Советуем проверить его самостоятельно")
+            await self._telegram_view.send_initial_keyboard(chat_id)
 
     async def set_last_action(self, chat_id, action):
         await self._users_management.set_last_usage_date(chat_id)
