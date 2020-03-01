@@ -108,13 +108,18 @@ class TelegramView:
 
     async def send_bot_description(self, chat_id):
         await self._controller.set_last_action(chat_id, "bot_description")
-        description = "test description"
+        description = "Этот бот предназначен для проверки различных каналов на участие в различных темных делишках.\n" \
+                      "Будь то ботоводство или мошенничество - нам все равное, были бы подтверждения" \
+                      "Все каналы, которые появляются в базе этого бота, появляются только после запросов от пользователей (с подтверждениями конечно же)\n" \
+                      "Как вы можете использовать данного бота:\n" \
+                      "1. Можно отправить ссылку/юзернейм/пост из канала и проверить - был ли данный канал замечен в чём-то нехорошем\n" \
+                      "2. Если вы встретились с мошенничеством, то вы можете добавить канал в нашу базу, обязательно предоставив доказательства"
 
         await self.send_message(chat_id, description)
 
     async def send_contacts(self, chat_id):
         await self._controller.set_last_action(chat_id, "contacts")
-        contacts = "По всем вопросам писать сюда: @test_username"
+        contacts = "По всем вопросам писать сюда: " + private_settings.CONTACT_USERNAME
 
         await self.send_message(chat_id, contacts)
 

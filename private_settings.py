@@ -8,4 +8,6 @@ SECRET_KEY = file.readline()[:-1]
 ADMIN_USERNAME = file.readline()[:-1]
 ADMIN_PASSWORD = file.readline()[:-1]
 
+CONTACT_USERNAME = file.readline()[:-1]
+
 file.close()
