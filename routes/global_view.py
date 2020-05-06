@@ -10,7 +10,7 @@ import models.web_management
 import private_settings
 
 class GlobalView:
-    app = Quart(__name__)
+    app = Quart(__name__, template_folder="../templates")
 
     def __init__(self, telegram_view, manage_view, web_management):
         self.app.secret_key = private_settings.SECRET_KEY
