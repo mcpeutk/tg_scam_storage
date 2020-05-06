@@ -6,7 +6,7 @@ from quart import Quart, request, redirect, render_template
 import sys
 sys.path.append("..")
 
-import models.web_management
+import models.web_management as web_management
 import private_settings
 
 class GlobalView:
