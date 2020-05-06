@@ -1,12 +1,12 @@
-import telegram_view
-import manage_view
-import global_view
+import routes.telegram_view as telegram_view
+import routes.manage_view as manage_view
+import routes.global_view as global_view
 import controller
-import users_management
-import channels_management
-import manual_management
-import web_management
-import telegram_connector
+import models.users_management as users_management
+import models.channels_management as channels_management
+import models.manual_management as manual_management
+import models.web_management as web_management
+import services.telegram_connector as telegram_connector
 
 if __name__ == "__main__":
     users_management = users_management.UsersManagement()

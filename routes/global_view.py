@@ -3,7 +3,10 @@ import flask_login
 import asyncio
 from quart import Quart, request, redirect, render_template
 
-import web_management
+import sys
+sys.path.append("..")
+
+import models.web_management
 import private_settings
 
 class GlobalView:
